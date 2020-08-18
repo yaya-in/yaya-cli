@@ -1,0 +1,25 @@
+{
+  "name": "tina-cli",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "bin": {
+    "tina-cli": "bin/www.js"
+  },
+  "scripts": {
+    "examp": "tina-cli create my"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "commander": "^6.0.0",
+    "eslint": "^7.7.0",
+    "husky": "^4.2.5",
+    "inquirer": "^7.3.3",
+    "ora": "^5.0.0"
+  },
+  "dependencies": {
+    "axios": "^0.19.2"
+  }
+}
