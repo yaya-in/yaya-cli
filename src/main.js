@@ -5,6 +5,7 @@ const path = require('path');
 const {version} = require('./utils/constants');
 const {mapActions}  = require('./utils/common');
 
+
 Reflect.ownKeys(mapActions).forEach( key => {
   const action = mapActions[key];
   program.command(key)
