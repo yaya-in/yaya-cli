@@ -15,7 +15,7 @@ Reflect.ownKeys(mapActions).forEach( key => {
       console.log(action.description)
     }
     else {
-      console.log(process.argv);
+      // console.log(process.argv);
       await require(path.join(__dirname, key))(...process.argv.slice(2))
     }
   })
