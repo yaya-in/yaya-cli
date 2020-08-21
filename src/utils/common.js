@@ -4,7 +4,6 @@ const path = require('path');
 const fse = require('fs-extra');
 const chalk = require('chalk');
 const Metalsmith = require('metalsmith');
-const consolidate = require('consolidate');
 const inquirer = require('inquirer');
 const {promisify} = require('util');
 const downloadGitRepo = require('download-git-repo');
@@ -12,9 +11,10 @@ const {WARNING_COLOR} = require("./constants");
 const {TITLE_COLOR} = require("./constants");
 const {downloadDirectory} = require("./constants");
 const downloadGit = promisify(downloadGitRepo);
+const fetch = require('node-fetch');
+const handlebars = require('handlebars');
+const commander = require('commander');
 
-const axios = require('axios');
-axios.defaults.timeout =  6000;
 
 const GITHUB_URL = 'https://api.github.com';
 const mapActions = {
@@ -57,13 +57,15 @@ const fnLoadingByOra = (fn, message) => async (...argv) => {
 
 const fetchRepostory = async () => {
   // 'https://api.github.com/orgs/yaya-in/repos'
-  const {data} = await axios.get(`${GITHUB_URL}/orgs/yaya-in/repos`);
+  const response = await fetch(`${GITHUB_URL}/orgs/yaya-in/repos`);
+  const data = await response.json();
   return data.map(item => item.name);
 };
 
 const getTagLists = async (repo) => {
   // https://api.github.com/repos/yaya-in/${repo}/tags
-  const {data} = await axios.get(`${GITHUB_URL}/repos/yaya-in/${repo}/tags`);
+  const response = await fetch(`${GITHUB_URL}/repos/yaya-in/${repo}/tags`);
+  const data = await response.json();
   return data
 };
 
@@ -123,37 +125,32 @@ const copyTempToLocal = async (target, projectName) => {
     // 获取askjs的问题列表并使用inquirer插件
     let replys = await askFilehandler(askFilePath);
 
-    Metalsmith(__dirname)
-    .source(target)
+    Metalsmith(target)
+    .source('./')
+    .ignore(
+      [
+        askFilePath,
+        `${target}/build`,
+        `${target}/.git`,
+        `${target}/.idea`,
+        `${target}/node_modules`
+      ]
+    )
     .destination(filePath)
     .use((files,metal, done) => {
-      const packageFileKey = Reflect.ownKeys(files).filter(items => items.includes('package.json'));
-      const ctx = files[packageFileKey].contents.toString('utf8');
-
-      if(ctx.includes('<%=')){
-        const pkAbPath = path.join(target, packageFileKey[0]);
-        consolidate.ejs(pkAbPath, replys, async (err, data) => {
-          if(err) {
-            return console.log(chalk.red(err))
-          }else {
-            files[packageFileKey].contents = Buffer.from(data, 'utf8');
-            // 输出packagejson到缓存文件中
-            await fse.outputFile(pkAbPath, data);
-            // 移除缓存文件的askjs
-            fse.remove(askFilePath).then(async resolve=>{
-              // 拷贝缓存文件到项目中
-              await fse.copy(target, filePath);
-            });
-            done()
-          }
-        })
-      }else {}
+      Reflect.ownKeys(files).forEach( fileName => {
+        if(fileName.includes('package.json')){
+          let ctx = files[fileName].contents.toString();
+          files[fileName].contents = Buffer.from(handlebars.compile(ctx)(replys))
+        }
+      });
+      done()
     })
-    .build(err => {
+  .build(err => {
       if(err) {
         console.log(chalk.red('项目生成失败', err));
       }else {
-        console.log(chalk.blue('项目生成成功'));
+        console.log(chalk.green('项目生成成功'));
       }
     })
   }else {

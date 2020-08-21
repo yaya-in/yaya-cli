@@ -1,2 +1,11 @@
-1. 判断项目目录是否已经存在
-2.
+## yaya-cli
+### Set Up
+```javascript
+npm i tina-cli -g
+```
+### 
+
+### Usage
+```javascript
+tina create <project-name>
+``` 
