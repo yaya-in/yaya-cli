@@ -1,6 +1,6 @@
 {
   "name": "tina-cli",
-  "version": "1.2.0",
+  "version": "1.2.3",
   "description": "",
   "main": "index.js",
   "bin": {
@@ -9,10 +9,15 @@
   "scripts": {
     "examp": "tina create my"
   },
+  "homepage": "https://github.com/yaya-in/yaya-cli/blob/master/README.md",
+  "repository": {
+    "type": "github",
+    "url": "https://github.com/yaya-in/yaya-cli/blob/master"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "devDependencies": {
+  "dependencies": {
     "chalk": "^4.1.0",
     "commander": "^6.0.0",
     "consolidate": "^0.15.1",
@@ -24,9 +29,7 @@
     "inquirer": "^7.3.3",
     "metalsmith": "^2.3.0",
     "node-fetch": "^2.6.0",
-    "ora": "^5.0.0"
-  },
-  "dependencies": {
+    "ora": "^5.0.0",
     "fs-extra": "^9.0.1"
   }
 }
