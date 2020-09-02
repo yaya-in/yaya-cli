@@ -153,11 +153,16 @@ const copyTempToLocal = async (target, projectName) => {
         console.log(chalk.green('项目生成成功'));
       }
     })
-  }else {
-    fse.copySync(target, filePath)
   }
-
-
+  else {
+    try {
+      await fse.copy(target, filePath);
+      console.log(chalk.green('项目生成成功'));
+    }
+    catch (e) {
+      console.log(e)
+    }
+  }
 
 };
 

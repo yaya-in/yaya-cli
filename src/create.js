@@ -38,14 +38,19 @@ module.exports = async () => {
   if(!tags) throw new Error("repository' tags is empty");
   tags = tags.map(item => item.name);
 
-  const {tag} = await inquirer.prompt([
-    {
-      type: 'list',
-      name: 'tag',
-      message: '请选择一个该项目的版本下载',
-      choices: tags
-    }
-  ]);
+  const tag = '';
+
+  if(tags.length > 0) {
+    const {tag: target} = await inquirer.prompt([
+      {
+        type: 'list',
+        name: 'tag',
+        message: '请选择一个该项目的版本下载',
+        choices: tags
+      }
+    ]);
+  }
+
   // console.log(chalk.hex(TITLE_COLOR).bold(`------拉取${repo}@${tag}------`));
 
   const target = await fnLoadingByOra(downDir, '获取内容\n')(repo, tag);
