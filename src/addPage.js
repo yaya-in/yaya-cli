@@ -8,12 +8,17 @@ const projectPath = path.resolve();
 const pagesPath = path.join(projectPath, './src/pages');
 
 module.exports = async () => {
+  // 检测pages目录
   const existPagesFile = await fse.pathExists(pagesPath);
   if(!existPagesFile){
-    console.log(chalk.red('can not find /Users/pundix0031/git/tina-cli/src/pages/'));
+    console.log(chalk.red(`can not find ${pagesPath}`));
     process.exit()
   }
+
+  // 创建pageName目录
   const pageName = process.argv[3];
+  await fse.ensureDir(`${pagesPath}/${pageName}`);
+
   // HTML文件写入
   const htmlData = '<!DOCTYPE html>\n' +
     '<html>\n' +
@@ -26,7 +31,7 @@ module.exports = async () => {
     '<body>\n' +
     '</body>\n' +
     '</html>';
-  fs.writeFile(`${pagesPath}/${pageName}.html`, htmlData, (err) => {
+  fs.writeFile(`${pagesPath}/${pageName}/${pageName}.html`, htmlData, (err) => {
 
     if(err) {
       console.log(err);
@@ -39,11 +44,11 @@ module.exports = async () => {
   });
 
   // CSS文件写入
-  await fse.ensureFile(`${pagesPath}/${pageName}.css`);
+  await fse.ensureFile(`${pagesPath}/${pageName}/${pageName}.css`);
 
   // JS文件写入
   const jsData = `import './${pageName}.css';\n console.log('${pageName} page');`;
-  fs.writeFile(`${pagesPath}/${pageName}.js`, jsData, async err => {
+  fs.writeFile(`${pagesPath}/${pageName}/${pageName}.js`, jsData, async err => {
 
     if(err) {
       console.log(err);
