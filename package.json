@@ -1,6 +1,6 @@
 {
   "name": "tina-cli",
-  "version": "1.3.1",
+  "version": "1.4.0",
   "description": "",
   "main": "index.js",
   "bin": {
@@ -8,6 +8,7 @@
   },
   "scripts": {
     "examp": "tina create my",
+    "help": "tina --help",
     "pub": "npm publish"
   },
   "homepage": "https://github.com/yaya-in/yaya-cli/blob/master/README.md",

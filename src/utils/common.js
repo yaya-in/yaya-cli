@@ -25,12 +25,11 @@ const mapActions = {
       'tina create <project-name>'
     ]
   },
-  config: {
-    alias: 'conf',
-    description: 'config project variable',
+  addPage:{
+    alias: 'ap',
+    description: "在pages/下创建页面模板，并配置在module-config下",
     examples: [
-      'tina config set <k> <v>',
-      'tina config set <k>'
+      'tina addPage <page-name>'
     ]
   },
   '*': {
